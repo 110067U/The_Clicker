@@ -17,4 +17,5 @@
     <string name="c">C</string>
     <string name="b">B</string>
     <string name="a">A</string>
+    <string name="attempts_left">Attempts Left = 3</string>
 </resources>

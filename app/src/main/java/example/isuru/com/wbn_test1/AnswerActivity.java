@@ -9,9 +9,18 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+
+//Test test test
+
 public class AnswerActivity extends AppCompatActivity {
 
     private TextView title;
+    private TextView attemptsText;
     private Button ansA;
     private Button ansB;
     private Button ansC;
@@ -20,6 +29,8 @@ public class AnswerActivity extends AppCompatActivity {
     private Button submit;
     private Button back;
     private String answer;
+    private static int attempts = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,10 +93,24 @@ public class AnswerActivity extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(AnswerActivity.this,"Sending Answer: "+answer,Toast.LENGTH_SHORT).show();
+                if(answer==null){
+                    Toast.makeText(AnswerActivity.this,"Please select an answer first",Toast.LENGTH_SHORT).show();
+                }else{
+                    if(attempts<3){
+                        Toast.makeText(AnswerActivity.this,"Sending Answer: "+answer,Toast.LENGTH_SHORT).show();
+                        //Network code goes here, send response from client to server
 
-                //Network code goes here, send response from client to server
 
+
+
+                        //if answer has sent successfully
+                        attempts++;
+                        attemptsText.setText("Attempts Left = "+(3-attempts));
+                    }else{
+                        //no more attempts
+                        Toast.makeText(AnswerActivity.this,"No more attempts !",Toast.LENGTH_SHORT).show();
+                    }
+                }
 
             }
         });
@@ -93,6 +118,7 @@ public class AnswerActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                attempts=0;
                 finish();
             }
         });
@@ -100,6 +126,7 @@ public class AnswerActivity extends AppCompatActivity {
 
     public void initView(){
         title = (TextView)findViewById(R.id.textView);
+        attemptsText = (TextView)findViewById(R.id.attemptsText);
         ansA = (Button)findViewById(R.id.ansA);
         ansB = (Button)findViewById(R.id.ansB);
         ansC = (Button)findViewById(R.id.ansC);
@@ -152,5 +179,27 @@ public class AnswerActivity extends AppCompatActivity {
     }
 
 
+    public void sendAnswer(String hostName, int portNumber){
+        try {
+            System.out.println("sending............");
+            Socket clientSocket = new Socket(hostName, portNumber);
+            PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+
+            out.println("110228P:3");
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+
+            String fromServer;
+            if ((fromServer = in.readLine()) != null) {
+                System.out.println("Server: " + fromServer);
+//                System.out.println("enter something");
+//                input = s.nextLine();
+//                out.println(input);
+            }
+        }
+        catch (IOException i){
+            i.printStackTrace();
+        }
+    }
 
 }

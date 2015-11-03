@@ -69,6 +69,8 @@ public class InitialActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = appSP.edit();
 
         String value = txt_index.getText().toString();
+        //parity check
+
 
         //first check how many student ids has been saved
         String count = appSP.getString("count",null);

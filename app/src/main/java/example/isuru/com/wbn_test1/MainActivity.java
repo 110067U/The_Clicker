@@ -99,6 +99,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void listenToService(){
 
+        //network code to check for broadcast messages
+
+
+
+
+
+        //if a new quiz is detected (if server's broadcast message is received)
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
         alertDialogBuilder.setTitle("New Quiz");
         alertDialogBuilder
@@ -110,8 +117,6 @@ public class MainActivity extends AppCompatActivity {
                         Intent mainIntent = new Intent(MainActivity.this, AnswerActivity.class);
                         mainIntent.putExtra("index",selectIndex.getSelectedItem().toString());
                         startActivity(mainIntent);
-//                        finish();
-
                     }
                 })
                 .setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
